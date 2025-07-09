@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Butkii ❤️</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .swiper {
+      width: 100vw;
+      height: 100vh;
+    }
+    .swiper-slide {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .swiper-slide img {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 20px;
+    }
+    .text {
+      font-size: 20px;
+      padding: 0 20px;
+    }
+    #game, #gift {
+      display: none;
+    }
+    #giftMessage {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+    .memory-card {
+      width: 70px;
+      height: 70px;
+      margin: 10px;
+      display: inline-block;
+      background-color: white;
+      border-radius: 10px;
+      background-size: cover;
+      background-position: center;
+    }
+    .memory-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: pink;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <img src="sticker1.png" alt="sticker" />
+        <div class="text">Hii baby...</div>
+      </div>
+      <div class="swiper-slide">
+        <img src="sticker1.png" alt="sticker" />
+        <div class="text">Kesa h baby? Pain jyada hora h...</div>
+      </div>
+      <div class="swiper-slide">
+        <img src="sticker4.png" alt="hug sticker" />
+        <div class="text">You are strong girl...</div>
+      </div>
+      <div class="swiper-slide" id="game">
+        <div class="text">Play the memory game 💖</div>
+        <div class="memory-grid" id="memoryGrid"></div>
+      </div>
+      <div class="swiper-slide" id="gift">
+        <div class="text">There is a gift for you 🎁</div>
+        <button onclick="showGift()">Open Gift</button>
+        <div id="giftMessage">
+          <p>You are strong girl..<br>
+          Rona nhi h I'm always with you..<br>
+          Love you baby 😘<br><br>
+          It's hard time hun milke iska samna krenge yeahh<br>
+          Love you baby 😘<br>
+          Take care princess ❤️<br>
+          I'm always with you ❤️</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    const swiper = new Swiper('.swiper', {
+      direction: 'horizontal',
+      loop: false,
+      on: {
+        slideChange: function () {
+          if (swiper.activeIndex === 3) {
+            createMemoryGame();
+          }
+        }
+      }
+    });
+
+    const cardImages = ['sticker2.png', 'sticker3.png'];
+    let flippedCards = [];
+    let matched = 0;
+
+    function createMemoryGame() {
+      document.getElementById('game').style.display = 'flex';
+      const grid = document.getElementById('memoryGrid');
+      grid.innerHTML = '';
+      const cards = [...cardImages, ...cardImages];
+      cards.sort(() => 0.5 - Math.random());
+      cards.forEach((img, index) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.dataset.image = img;
+        card.addEventListener('click', flipCard);
+        grid.appendChild(card);
+      });
+    }
+
+    function flipCard(e) {
+      const card = e.currentTarget;
+      if (flippedCards.length < 2 && !card.style.backgroundImage) {
+        card.style.backgroundImage = `url(${card.dataset.image})`;
+        flippedCards.push(card);
+        if (flippedCards.length === 2) {
+          if (flippedCards[0].dataset.image === flippedCards[1].dataset.image) {
+            matched += 1;
+            flippedCards = [];
+            if (matched === cardImages.length) {
+              swiper.slideTo(4);
+            }
+          } else {
+            setTimeout(() => {
+              flippedCards.forEach(c => c.style.backgroundImage = '');
+              flippedCards = [];
+            }, 1000);
+          }
+        }
+      }
+    }
+
+    function showGift() {
+      document.getElementById('giftMessage').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
